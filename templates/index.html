@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuMind AI | Document Investigator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #172033;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 25px auto;
+            padding: 0 18px;
+        }
+
+        .panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+            text-align: left !important;
+        }
+
+        header {
+            text-align: left !important;
+        }
+
+        h1 {
+            color: #312e81;
+            font-size: 34px;
+        }
+
+        h1, h2, h3, h4 {
+            text-align: left !important;
+            color: #1e293b;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #dbe4f0;
+            border-radius: 18px;
+            padding: 22px 12px;
+            text-align: center !important;
+        }
+
+        .stat-card h3 {
+            font-size: 15px;
+            color: #64748b;
+            margin: 0 0 12px;
+            text-align: center !important;
+        }
+
+        .stat-card p {
+            color: #4f46e5;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+            overflow-wrap: anywhere;
+            text-align: center !important;
+        }
+
+        .field {
+            margin: 15px 0;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        button, .download-link {
+            display: inline-block;
+            background: #4f46e5;
+            color: #ffffff;
+            border: 0;
+            padding: 12px 17px;
+            border-radius: 9px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+        }
+
+        button:hover, .download-link:hover {
+            background: #3730a3;
+        }
+
+        .download-link.secondary {
+            background: #0f766e;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .muted {
+            color: #64748b;
+        }
+
+        .content {
+            white-space: normal;
+            overflow-wrap: anywhere;
+            line-height: 1.8;
+            text-align: left !important;
+        }
+
+        .summary-line {
+            margin: 8px 0;
+            text-align: left;
+        }
+
+        .summary-heading {
+            color: #3730a3;
+            font-size: 19px;
+            font-weight: bold;
+            margin-top: 22px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .summary-bullet {
+            margin: 8px 0 8px 18px;
+            text-align: left;
+        }
+
+        .keyword {
+            display: inline-block;
+            background: #eef2ff;
+            color: #3730a3;
+            padding: 6px 11px;
+            border-radius: 20px;
+            margin: 4px;
+            text-align: left;
+        }
+
+        .match {
+            border-left: 4px solid #6366f1;
+            padding: 12px;
+            background: #f8fafc;
+            margin: 12px 0;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .chat-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .extracted-page {
+            margin: 14px 0;
+            padding: 16px;
+            background: #f8fafc;
+            border: 1px solid #dbe4f0;
+            border-radius: 12px;
+            text-align: left !important;
+        }
+
+        .extracted-page summary {
+            color: #2563eb;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: left !important;
+        }
+
+        .extracted-content {
+            margin-top: 16px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.9;
+            font-size: 15px;
+            color: #334155;
+            text-align: left !important;
+        }
+
+        details {
+            text-align: left !important;
+        }
+
+        form, label, p {
+            text-align: left;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 850px) {
+            .dashboard {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <header class="panel">
+        <h1>DocuMind AI</h1>
+        <p><strong>Intelligent Document Investigator</strong></p>
+        <p class="muted">
+            Analyze, summarize, search and compare PDF documents with local AI.
+        </p>
+    </header>
+
+    {% if error %}
+    <div class="error" role="alert">{{ error }}</div>
+    {% endif %}
+
+    <section class="panel">
+        <h2>Upload PDF Documents</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="field">
+                <label for="documents">Select PDF file(s)</label>
+                <input id="documents" type="file" name="documents"
+                       accept=".pdf,application/pdf" multiple required>
+            </div>
+            <button type="submit">Generate AI Summary &amp; Keywords</button>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>Compare Two PDFs</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="compare">
+
+            <div class="field">
+                <label for="pdf1">First PDF</label>
+                <input id="pdf1" type="file" name="pdf1"
+                       accept=".pdf,application/pdf" required>
+            </div>
+
+            <div class="field">
+                <label for="pdf2">Second PDF</label>
+                <input id="pdf2" type="file" name="pdf2"
+                       accept=".pdf,application/pdf" required>
+            </div>
+
+            <button type="submit">Compare Documents with AI</button>
+        </form>
+    </section>
+
+    {% if comparison %}
+    <section class="panel">
+        <h2>AI Document Comparison</h2>
+
+        <p><strong>Document 1:</strong> {{ comparison.filename1 }}</p>
+        <p><strong>Document 2:</strong> {{ comparison.filename2 }}</p>
+
+        <h3>Common Information</h3>
+        <div class="content">{{ comparison.common }}</div>
+
+        <h3>Key Differences</h3>
+        <div class="content">{{ comparison.differences }}</div>
+
+        <h3>AI Comparison Report</h3>
+        <div class="content">{{ comparison.report }}</div>
+    </section>
+    {% endif %}
+
+    {% for result in results %}
+    <section class="panel">
+
+        <h2>Document: {{ result.filename }}</h2>
+        <p class="muted">Document Analysis Dashboard</p>
+
+        <div class="dashboard">
+            <div class="stat-card">
+                <h3>Total Pages</h3>
+                <p>{{ result.page_count }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Word Count</h3>
+                <p>{{ result.get('text', '').split() | length }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Keywords</h3>
+                <p>{{ result.get('keywords', '').splitlines() | length if result.get('keywords') else 0 }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Text Characters</h3>
+                <p>{{ result.get('text_length', 0) }}</p>
+            </div>
+        </div>
+
+        <h3>AI Summary</h3>
+
+        <div class="content">
+            {% for line in result.get('summary', '').splitlines() %}
+                {% set clean_line = line.strip() %}
+
+                {% if clean_line %}
+                    {% if clean_line.startswith('### ') %}
+                        <h4 class="summary-heading">
+                            {{ clean_line[4:] | replace('**', '') }}
+                        </h4>
+                    {% elif clean_line.startswith('## ') %}
+                        <h3 class="summary-heading">
+                            {{ clean_line[3:] | replace('**', '') }}
+                        </h3>
+                    {% elif clean_line.startswith('# ') %}
+                        <h3 class="summary-heading">
+                            {{ clean_line[2:] | replace('**', '') }}
+                        </h3>
+                    {% elif clean_line.startswith('**') and clean_line.endswith('**') %}
+                        <h3 class="summary-heading">
+                            {{ clean_line.strip('*') }}
+                        </h3>
+                    {% elif clean_line.startswith('- ') or clean_line.startswith('* ') %}
+                        <p class="summary-bullet">
+                            • {{ clean_line[2:] | replace('**', '') }}
+                        </p>
+                    {% else %}
+                        <p class="summary-line">
+                            {{ clean_line | replace('**', '') }}
+                        </p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div>
+            <a class="download-link"
+               href="{{ url_for('download_summary', document_id=result.document_id, file_type='txt') }}">
+                Download Summary TXT
+            </a>
+
+            <a class="download-link secondary"
+               href="{{ url_for('download_summary', document_id=result.document_id, file_type='pdf') }}">
+                Download Summary PDF
+            </a>
+        </div>
+
+        <hr>
+
+        <h3>AI-Extracted Keywords</h3>
+
+        {% if result.get('keywords') %}
+            <div class="content">
+                {% for line in result.keywords.splitlines() %}
+                    {% set keyword_line = line.strip() %}
+                    {% if keyword_line %}
+                        <span class="keyword">
+                            {{ keyword_line | replace('**', '') | replace('- ', '') }}
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">No keywords available. Upload this PDF again.</p>
+        {% endif %}
+
+        <hr>
+
+        <h3>Smart Search in PDF</h3>
+
+        <form method="POST">
+            <input type="hidden" name="action" value="search">
+            <input type="hidden" name="document_id" value="{{ result.document_id }}">
+
+            <div class="field">
+                <label for="search-{{ result.document_id }}">Search word or phrase</label>
+                <input id="search-{{ result.document_id }}"
+                       type="text" name="search_query" maxlength="200"
+                       value="{{ result.get('search_query', '') }}"
+                       placeholder="e.g. React, Python, Education" required>
+            </div>
+
+            <button type="submit">Search PDF</button>
+        </form>
+
+        {% if result.get('search_query') %}
+            <h3>Results for "{{ result.search_query }}"</h3>
+            <p>Matches found: {{ result.get('search_results', []) | length }}</p>
+
+            {% for item in result.get('search_results', []) %}
+                <div class="match">
+                    <strong>Page {{ item.page }}</strong>
+                    <p>{{ item.context }}</p>
+                </div>
+            {% else %}
+                <p>No matches found for this search.</p>
+            {% endfor %}
+        {% endif %}
+
+        <hr>
+
+        <h3>Ask Questions About This PDF</h3>
+
+        <form method="POST">
+            <input type="hidden" name="action" value="ask">
+            <input type="hidden" name="document_id" value="{{ result.document_id }}">
+
+            <div class="field">
+                <label for="question-{{ result.document_id }}">Your question</label>
+                <textarea id="question-{{ result.document_id }}"
+                          name="question" rows="3" maxlength="1000"
+                          placeholder="Ask a question based on this document..."
+                          required></textarea>
+            </div>
+
+            <button type="submit">Ask DocuMind AI</button>
+        </form>
+
+        {% if result.get('chat_history') %}
+            <h3>Chat History</h3>
+
+            {% for chat in result.chat_history %}
+                <div class="chat-item">
+                    <p><strong>You:</strong> {{ chat.question }}</p>
+                    <p><strong>DocuMind AI:</strong></p>
+                    <div class="content">{{ chat.answer }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <hr>
+
+        <h3>Extracted Text by Page</h3>
+
+        {% for page in result.get('pages', []) %}
+            <details class="extracted-page">
+                <summary>Page {{ page.page }}</summary>
+
+                <div class="extracted-content">{{ page.text }}</div>
+            </details>
+        {% endfor %}
+
+    </section>
+    {% endfor %}
+
+    <footer class="panel">
+        <p class="muted">DocuMind AI | Powered by Local Ollama AI</p>
+    </footer>
+
+</main>
+</body>
+</html>

@@ -1,31 +1,35 @@
 # DocuMind AI – Intelligent Document Investigator
 
+An AI-powered document analysis application that helps users understand, search, summarize, and compare PDF documents using Generative AI.
+
 ## Project Overview
-DocuMind AI is an AI-powered document analysis application that helps users upload, understand, search, and compare PDF documents. It uses Python, Flask, and a locally running Ollama LLM to provide intelligent document insights.
+
+DocuMind AI is a Python-based web application developed using Flask and Ollama. It allows users to upload PDF documents and interact with their content through AI-powered features.
+
+The application simplifies document investigation by generating summaries, answering questions, extracting keywords, searching document content, and comparing two PDF files.
 
 ## Key Features
 
-- **PDF Upload:** Upload and process PDF documents.
-- **AI-Powered Summary:** Generate summaries with Overview, Key Points, Important Dates and Names, and Conclusion.
-- **Keyword Extraction:** Identify important keywords from uploaded documents.
-- **Smart Search:** Search for specific information and find matching page numbers.
-- **Ask AI Questions:** Ask questions about uploaded PDF documents and receive AI-generated answers.
+- **AI-Powered PDF Summarization:** Generate meaningful summaries of uploaded PDF documents.
+- **Ask Questions:** Ask questions about document content and receive AI-generated answers.
+- **Smart Search:** Search for specific information and view relevant page context.
 - **PDF Comparison:** Compare two PDF documents and identify common information and differences.
-- **Download Reports:** Download document summaries and comparison reports.
-- **Text Extraction:** Extract and display text page by page.
-- **File Validation:** Validate file types and handle empty uploads.
+- **Keyword Extraction:** Extract important keywords from documents.
+- **Document Dashboard:** View document statistics such as page count, word count, and text characters.
+- **Page-wise Text Extraction:** View extracted text from individual PDF pages.
+- **Download Reports:** Download generated summaries and PDF comparison reports.
 
 ## Technologies Used
 
-| Category | Technology |
+| Category | Technologies |
 |---|---|
 | Programming Language | Python |
-| Backend Framework | Flask |
+| Backend | Flask |
 | Frontend | HTML, CSS, JavaScript |
-| AI / LLM | Ollama |
+| Generative AI | Ollama |
 | AI Model | Llama 3.2 (3B) |
 | PDF Processing | PyMuPDF |
-| HTTP Requests | Requests |
+| API Communication | Requests |
 
 ## Project Structure
 
@@ -36,21 +40,19 @@ DocuMind_AI/
 │   ├── app.py
 │   └── pdf_processor.py
 │
-├── templates/
-│   └── index.html
-│
 ├── static/
 │   └── style.css
+│
+├── templates/
+│   └── index.html
 │
 ├── uploads/
 ├── document_data/
 ├── reports/
-├── venv/
 │
-├── .env
-├── .gitignore
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ## Installation and Setup
@@ -58,30 +60,36 @@ DocuMind_AI/
 ### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd DocuMind_AI
+git clone https://github.com/Sanika213/DocuMind-AI.git
 ```
 
-### 2. Create Virtual Environment
+### 2. Open the Project Folder
+
+```bash
+cd DocuMind-AI
+```
+
+### 3. Create a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-### 3. Install Dependencies
+### 4. Activate Virtual Environment (Windows)
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+### 5. Install Dependencies
 
 ```bash
-venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Install and Start Ollama
+### 6. Install and Start Ollama
 
-Download Ollama from:
-
-https://ollama.com/
-
-Pull the AI model:
+Install Ollama and download the model:
 
 ```bash
 ollama pull llama3.2:3b
@@ -93,15 +101,17 @@ Start the model:
 ollama run llama3.2:3b
 ```
 
-### 5. Run the Flask Application
+Keep Ollama running while using the application.
 
-Open another terminal and execute:
+### 7. Run the Flask Application
+
+Open another terminal:
 
 ```bash
 python Backend/app.py
 ```
 
-### 6. Open in Browser
+### 8. Open in Browser
 
 ```text
 http://127.0.0.1:5000
@@ -109,31 +119,28 @@ http://127.0.0.1:5000
 
 ## Application Workflow
 
-1. Upload a PDF document.
-2. Extract text from the document.
+1. Open the DocuMind AI web application.
+2. Upload a PDF document.
 3. Generate an AI-powered summary.
-4. Extract important keywords.
-5. Search for information within the PDF.
-6. Ask questions and receive AI-generated answers.
-7. Upload two PDFs to compare their content.
-8. Download the generated reports.
+4. Explore keywords and document statistics.
+5. Search for information or ask questions.
+6. Upload two PDFs to compare their content.
+7. Download the generated reports.
 
 ## Future Enhancements
 
+- OCR support for scanned PDF documents.
 - Support for additional document formats.
 - Advanced document analytics.
-- Multi-language document support.
-- Improved AI-based information retrieval.
-- User authentication and document management.
-
-## Project Status
-
-**Completed – Core features implemented and tested.**
+- Improved AI response accuracy.
+- Multi-document question answering.
 
 ## Author
 
-**Sanika Nitin Kamble**
+**Sanika Kamble**
 
-Computer Science and Engineering Graduate
+GitHub: [Sanika213](https://github.com/Sanika213)
 
-AI | Python | Web Development | Generative AI
+---
+
+⭐ If you find this project interesting, consider giving the repository a star!

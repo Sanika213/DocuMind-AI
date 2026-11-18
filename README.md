@@ -126,6 +126,22 @@ http://127.0.0.1:5000
 5. Search for information or ask questions.
 6. Upload two PDFs to compare their content.
 7. Download the generated reports.
+## Screenshots
+
+### 1. Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### 2. AI Summary
+![AI Summary](screenshots/ai-summary.png)
+
+### 3. Smart Search
+![Smart Search](screenshots/smart-search.png)
+
+### 4. PDF Comparison
+![PDF Comparison](screenshots/pdf-comparison.png)
+
+### 5. Ask AI
+![Ask AI](screenshots/ask-ai.png)
 
 ## Future Enhancements
 
